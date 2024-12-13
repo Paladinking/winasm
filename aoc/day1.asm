@@ -19,7 +19,8 @@ section '.text' code readable executable
 ; This should be in .data, but putting it in .text allows
 ; the whole program to only have 1 section
 ; UTF-16 string "input.txt"
-input: dw "i", "n", "p", "u", "t", ".", "t", "x", "t"
+input: dw "i", "n", "p", "u", "t", "1", ".", "t", "x", "t"
+define INPUT_LEN 10 ; Length of input string
 
 ; Converts a string to a 64 bit unsigned.
 ; rcx: ptr, will point at first non-number after.
@@ -532,9 +533,11 @@ main:
     mov rbp, rsp
 
     lea rcx, [input]
-    mov rdx, 9
+    mov rdx, INPUT_LEN
     call file_open
     mov rsi, rax
+    test rax, rax
+    je .exit
 
     mov rcx, rax
     call file_size
