@@ -7,6 +7,7 @@ input: dw "i", "n", "p", "u", "t", "2", ".", "t", "x", "t"
 define INPUT_LEN 10
 
 include "utils.asm"
+include "setup.asm"
 
 ; rcx = ptr
 ; rdx = length
