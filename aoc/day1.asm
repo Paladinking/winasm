@@ -23,6 +23,11 @@ parse_lines:
  .loop:
     cmp rdi, rbx
     je .exit
+    cmp BYTE [rcx], 0xa
+    jne .first_num
+    inc rcx
+    jmp .loop
+ .first_num:
     call parse_u64_cstr
     mov QWORD [rdi], rax
  .spaces:
