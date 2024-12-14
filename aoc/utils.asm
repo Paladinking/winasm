@@ -82,7 +82,7 @@ print_u64:
     lea rcx, [rsp + 51]
     lea rdx, [rax + 1]
     mov BYTE [rcx + rax], 0xA
-    call print  
+    call print
  .exit:
     add rsp, 72
     ret

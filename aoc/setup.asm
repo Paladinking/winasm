@@ -219,12 +219,14 @@ setup:
     call file_size
     mov rdi, rax
 
+    inc rax ; Space for null-terminator
     call stack_alloc
 
     mov rcx, rsi
     mov rdx, rsp
     mov r8, rdi
     call file_read
+    mov BYTE [rsp + rdi], 0x0
 
     mov rcx, rsi
     call file_close
@@ -238,3 +240,4 @@ setup:
     pop rdi
     pop rsi
     pop rbp
+    ret
