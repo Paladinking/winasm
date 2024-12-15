@@ -36,7 +36,6 @@ parse_order:
     lea rsi, [r8 + 8]
     lea rdi, [rcx + rdx]
     xor rbp, rbp
-    mov QWORD [rsi - 8], r8
 
     cmp rcx, rdi
     je .exit
