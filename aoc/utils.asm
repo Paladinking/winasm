@@ -142,6 +142,67 @@ memmove:
  .exit:
     ret
 
+; Set rdx bytes starting at rcx to r8b
+memset:
+    and r8, 0xff
+    movq xmm0, r8
+    vpbroadcastb xmm0, xmm0
+ .first:
+    cmp rdx, 16
+    jb .last
+    movdqu OWORD [rcx + rdx - 16], xmm0
+    sub rdx, 16
+    jmp .first
+ .last:
+    cmp rdx, 0
+    je .exit
+    mov BYTE [rcx + rdx - 1], 0
+    dec rdx
+    jmp .last
+ .exit:
+    ret
+
+
+; rcx = ptr
+; rdx = length of input
+; sorts and removes duplicate elements
+; returns new length
+listq_to_set:
+    push rsi
+    push rdi
+    sub rsp, 8
+    test rdx, rdx
+    je .exit
+
+    mov rsi, rcx
+    mov rdi, rdx
+    call listq_sort
+
+    mov rcx, rsi
+    lea rdx, [rcx + 8]
+    lea rdi, [rcx + rdi * 8]
+ .loop:
+    cmp rdx, rdi
+    jae .exit
+    mov r8, QWORD [rdx]
+    cmp QWORD [rcx], r8
+    je .next
+    add rcx, 8
+    mov QWORD [rcx], r8
+ .next:
+    add rdx, 8
+    jmp .loop
+
+ .exit:
+    sub rcx, rsi
+    shr rcx, 3
+    lea rax, [rcx + 1]
+    add rsp, 8
+    pop rdi
+    pop rsi
+    ret
+
+
 ; rcx = ptr to input
 ; rdx = length of input
 listq_sort:
